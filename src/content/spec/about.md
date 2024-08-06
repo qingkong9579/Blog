@@ -1,7 +1,8 @@
 # About
-This is the demo site for [Fuwari](https://github.com/saicaca/fuwari).
+一只正在学习的小趴菜<br>
 
-::github{repo="saicaca/fuwari"}
+[Github](https://github.com/qingkong9579).
+
 
 > ### Sources of images used in this site
 > - [Unsplash](https://unsplash.com/)
