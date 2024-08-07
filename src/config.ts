@@ -76,3 +76,15 @@ export const licenseConfig: LicenseConfig = {
   name: 'CC BY-NC-SA 4.0',
   url: 'https://creativecommons.org/licenses/by-nc-sa/4.0/',
 }
+
+// 友链配置
+export interface FriendLink {
+  name: string;
+  url: string;
+}
+
+export const friendLinks: FriendLink[] = [
+  { name: '题目自拟的盒子', url: 'https://tmzncty.cn/' },
+  { name: '微茫之寻的图床', url: 'https://image.sfunction.top/' },
+  // 更多友链...
+];
