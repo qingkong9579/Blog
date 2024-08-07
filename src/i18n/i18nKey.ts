@@ -32,6 +32,8 @@ enum I18nKey {
   author = 'author',
   publishedAt = 'publishedAt',
   license = 'license',
+
+  friendLinks = 'friendLinks', // 友链的翻译键值
 }
 
 export default I18nKey

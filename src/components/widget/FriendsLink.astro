@@ -1,0 +1,36 @@
+---
+import { FriendLink, friendLinks } from '../../config'
+import I18nKey from '../../i18n/i18nKey'
+import { i18n } from '../../i18n/translation'
+import ButtonTag from '../control/ButtonTag.astro'
+// FriendsLink.astro
+import WidgetLayout from './WidgetLayout.astro'
+
+const COLLAPSED_HEIGHT = '7.5rem'
+
+const isCollapsed = friendLinks.length >= 10
+
+interface Props {
+  class?: string
+  style?: string
+}
+const className = Astro.props.class
+const style = Astro.props.style
+
+// 处理友链 URL，确保不添加前缀
+function handleFriendLink(url: string): string {
+  if (/^(http|https):\/\//.test(url)) {
+    return url
+  }
+  return `https://${url}`
+}
+---
+<WidgetLayout name={i18n(I18nKey.friendLinks)} id="friend-links" isCollapsed={isCollapsed} collapsedHeight={COLLAPSED_HEIGHT} class={className} style={style}>
+    <div class="flex gap-2 flex-wrap">
+        {friendLinks.map((link: FriendLink) => (
+            <ButtonTag href={handleFriendLink(link.url)} label={`Visit ${link.name}`}>
+                {link.name}
+            </ButtonTag>
+        ))}
+    </div>
+</WidgetLayout>
