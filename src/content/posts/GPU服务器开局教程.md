@@ -288,6 +288,130 @@ draft: false
 
   ​`python3 testpower.py`​
 
+#### 新遇到的问题
+
+* cuda runtime error (802) : system not yet initialized .../THCGeneral.cpp:50
+  
+  > [!TIP]
+  > （由题目自拟闯天涯实操过程中发现的问题）
+  
+  ::github{repo="pytorch/pytorch"}
+  该issue提供了解决方法 （[CUDA 运行时错误 （802）：系统尚未初始化 .../THCGeneral.cpp：50 ·问题 #35710 ·pytorch/pytorch --- cuda runtime error (802) : system not yet initialized .../THCGeneral.cpp:50 · Issue #35710 · pytorch/pytorch](https://github.com/pytorch/pytorch/issues/35710)）
+
+  * 尝试编译并运行 [NVIDIA/cuda-samples: Samples for CUDA Developers which demonstrates features in CUDA Toolkit](https://github.com/NVIDIA/cuda-samples)
+  ::github{repo="NVIDIA/cuda-samples"}
+
+  * ```zsh
+    git clone https://github.com/NVIDIA/cuda-samples.git
+    cd cuda-samples/Samples/bandwidthTest
+    make
+    ./bandwidthTest
+    ```
+  * > [!NOTE] 
+    > `nvcc`​ is going to be located in `/usr/local/cuda/bin`​ 注意： nvcc 将位于 /usr/local/cuda/bin
+  * 运行后结果：
+
+    * 未安装 Data Center GPU 管理器
+
+      * ```zsh
+        > ./bandwidthTest
+        [CUDA Bandwidth Test] - Starting...
+        Running on...
+
+        cudaGetDeviceProperties returned 802
+        -> system not yet initialized
+        CUDA error at bandwidthTest.cu:256 code=802(cudaErrorSystemNotReady) "cudaSetDevice(currentDevice)" 
+        ```
+      * 意味着未安装 Data Center GPU 管理器
+      * ```zsh
+        wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/cuda-ubuntu2004.pin
+        sudo mv cuda-ubuntu2004.pin /etc/apt/preferences.d/cuda-repository-pin-600
+        sudo apt-key adv --keyserver-options http-proxy=http://proxy-chain.intel.com:911  --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+        ```
+
+        * 若出现 unable to fetch （~~网络环境好应该不会出现~~
+
+          * ```zsh
+            >  sudo apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+            Executing: /tmp/apt-key-gpghome.qjhmgicscb/gpg.1.sh --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+            gpg: requesting key from 'https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub'
+            gpg: WARNING: unable to fetch URI https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub: Connection timed out
+            ```
+          * 那就设置代理
+
+            ```zsh
+            sudo apt-key adv --keyserver-options http-proxy=<PROXY-ADDRESS:PORT>  --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86_64/7fa2af80.pub
+            ```
+      * 然后开始安装 datacenter-gpu-manager
+
+        ```zsh
+        sudo add-apt-repository "deb https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2004/x86\_64/ /"
+        sudo apt-get update
+        sudo apt-get install -y datacenter-gpu-manager
+        ```
+      * 终止主机引擎
+
+        ```zsh
+        sudo nv-hostengine -t
+        ```
+      * 启动 fabricManager
+
+        ```zsh
+        sudo service nvidia-fabricmanager start
+        ```
+
+        * 如果出现
+
+          ```zsh
+          > sudo service nvidia-fabricmanager start
+          Failed to start nvidia-fabricmanager.service: Unit nvidia-fabricmanager.service not found.
+          ```
+        * 安装 Fabric Manager并启动
+
+          ```zsh
+          sudo apt-get install cuda-drivers-fabricmanager-<version>
+          sudo service nvidia-fabricmanager start
+          ```
+  * 再次运行`bandwidthTest`​
+
+    ```zsh
+    > ./bandwidthTest
+    [CUDA Bandwidth Test] - Starting...
+    Running on...
+
+     Device 0: NVIDIA A100-SXM4-40GB
+     Quick Mode
+
+     Host to Device Bandwidth, 1 Device(s)
+     PINNED Memory Transfers
+       Transfer Size (Bytes)        Bandwidth(GB/s)
+       32000000                     26.1
+
+     Device to Host Bandwidth, 1 Device(s)
+     PINNED Memory Transfers
+       Transfer Size (Bytes)        Bandwidth(GB/s)
+       32000000                     25.6
+
+     Device to Device Bandwidth, 1 Device(s)
+     PINNED Memory Transfers
+       Transfer Size (Bytes)        Bandwidth(GB/s)
+       32000000                     1152.7
+
+    Result = PASS
+
+    NOTE: The CUDA Samples are not meant for performance measurements. Results may vary when GPU Boost is enabled.
+
+    > ipython #torch检测
+    Python 3.7.11 (default, Jul 27 2021, 14:32:16) 
+    Type 'copyright', 'credits' or 'license' for more information
+    IPython 7.26.0 -- An enhanced Interactive Python. Type '?' for help.
+
+    In [1]: import torch
+    tor
+    In [2]: torch.cuda.is_available()
+    Out[2]: True
+    ```
+
 #### 具体应用
 
 * ollama（已实现，详见另一篇文章）
