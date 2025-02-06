@@ -114,6 +114,9 @@ export default defineConfig({
     ],
   },
   vite: {
+    ssr: {
+      noExternal: ['@fontsource-variable/jetbrains-mono']
+    },
     build: {
       rollupOptions: {
         onwarn(warning, warn) {
