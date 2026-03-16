@@ -44,30 +44,22 @@ export const sponsorConfig: SponsorConfig = {
 			description: "Buy a Coffee for Firefly",
 			enabled: true,
 		},
-		{
-			name: "爱发电",
-			icon: "simple-icons:afdian",
-			qrCode: "",
-			link: "https://afdian.com/a/cuteleaf",
-			description: "通过 爱发电 进行赞助",
-			enabled: true,
-		},
 	],
 
 	// 赞助者列表（可选）
 	sponsors: [
 		// 示例：已实名赞助者
-		{
-			name: "夏叶",
-			amount: "¥50",
-			date: "2025-10-01",
-		},
+		// {
+		// 	name: "夏叶",
+		// 	amount: "¥50",
+		// 	date: "2025-10-01",
+		// },
 
-		// 示例：匿名赞助者
-		{
-			name: "匿名用户",
-			amount: "¥20",
-			date: "2025-10-01",
-		},
+		// // 示例：匿名赞助者
+		// {
+		// 	name: "匿名用户",
+		// 	amount: "¥20",
+		// 	date: "2025-10-01",
+		// },
 	],
 };
