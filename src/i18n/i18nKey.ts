@@ -67,6 +67,7 @@ enum I18nKey {
 	systemMode = "systemMode",
 
 	more = "more",
+	collapse = "collapse",
 	all = "all",
 
 	author = "author",
@@ -196,6 +197,8 @@ enum I18nKey {
 	randomPosts = "randomPosts",
 	smartRecommend = "smartRecommend",
 	randomRecommend = "randomRecommend",
+	noRelatedPosts = "noRelatedPosts",
+	noRandomPosts = "noRandomPosts",
 
 	// 加密
 	postEncrypted = "postEncrypted",
@@ -203,14 +206,18 @@ enum I18nKey {
 	// 壁纸模式
 	wallpaperMode = "wallpaperMode",
 	wallpaperBannerMode = "wallpaperBannerMode",
+	wallpaperFullscreenMode = "wallpaperFullscreenMode",
 	wallpaperOverlayMode = "wallpaperOverlayMode",
 	wallpaperNoneMode = "wallpaperNoneMode",
 
-	// 横幅设置
-	bannerSettings = "bannerSettings",
-	bannerTitle = "bannerTitle",
-	bannerCarousel = "bannerCarousel",
+	// 壁纸设置
+	wallpaperSettings = "wallpaperSettings",
+	wallpaperTitle = "wallpaperTitle",
+	wallpaperCarousel = "wallpaperCarousel",
 	wavesAnimation = "wavesAnimation",
+	gradientTransition = "gradientTransition",
+	sakuraEffect = "sakuraEffect",
+	effectsSettings = "effectsSettings",
 	overlaySettings = "overlaySettings",
 	overlayOpacity = "overlayOpacity",
 	overlayBlur = "overlayBlur",

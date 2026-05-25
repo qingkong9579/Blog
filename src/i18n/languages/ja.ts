@@ -75,6 +75,7 @@ export const ja: Translation = {
 	[Key.systemMode]: "システム",
 
 	[Key.more]: "もっと",
+	[Key.collapse]: "折りたたむ",
 
 	[Key.author]: "著者",
 	[Key.publishedAt]: "公開日",
@@ -205,6 +206,8 @@ export const ja: Translation = {
 	[Key.randomPosts]: "ランダム記事",
 	[Key.smartRecommend]: "スマート",
 	[Key.randomRecommend]: "ランダム",
+	[Key.noRelatedPosts]: "関連記事がありません",
+	[Key.noRandomPosts]: "ランダム記事がありません",
 
 	// 暗号化
 	[Key.postEncrypted]: "この記事は暗号化されています",
@@ -212,14 +215,18 @@ export const ja: Translation = {
 	// 壁紙モード
 	[Key.wallpaperMode]: "壁紙モード",
 	[Key.wallpaperBannerMode]: "バナー壁紙",
+	[Key.wallpaperFullscreenMode]: "フルスクリーン壁紙",
 	[Key.wallpaperOverlayMode]: "透明",
 	[Key.wallpaperNoneMode]: "単色背景",
 
-	// バナー設定
-	[Key.bannerSettings]: "バナー設定",
-	[Key.bannerTitle]: "ホームバナータイトル",
-	[Key.bannerCarousel]: "バナーカルーセル",
+	// 壁紙設定
+	[Key.wallpaperSettings]: "壁紙設定",
+	[Key.wallpaperTitle]: "ホーム壁紙タイトル",
+	[Key.wallpaperCarousel]: "壁紙カルーセル",
 	[Key.wavesAnimation]: "波アニメーション",
+	[Key.gradientTransition]: "グラデーション遷移",
+	[Key.sakuraEffect]: "桜エフェクト",
+	[Key.effectsSettings]: "エフェクト設定",
 	[Key.overlaySettings]: "透明設定",
 	[Key.overlayOpacity]: "壁紙の透明度",
 	[Key.overlayBlur]: "背景ぼかし",
@@ -309,7 +316,7 @@ export const ja: Translation = {
 	// パスワード保護
 	[Key.passwordProtected]: "パスワード保護",
 	[Key.passwordProtectedDesc]:
-		"この記事はパスワードで保護されています。内容を表示するにはパスワードを入力してください。",
+		"このコンテンツはパスワードで保護されています。表示するにはパスワードを入力してください。",
 	[Key.passwordHint]: "ヒント",
 	[Key.passwordPlaceholder]: "パスワードを入力",
 	[Key.passwordSubmit]: "ロック解除",
