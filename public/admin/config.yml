@@ -7,7 +7,7 @@ backend:
   repo: qingkong9579/Blog
   branch: master
   base_url: https://blog-cms-oauth.sfunction.top/
-  auth_endpoint: authorize
+  auth_endpoint: auth
 
 # 发布模式：simple = 直接提交，不使用 PR 流程
 publish_mode: simple
