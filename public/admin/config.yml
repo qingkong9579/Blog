@@ -9,6 +9,9 @@ backend:
   base_url: https://blog-cms-oauth.sfunction.top/
   auth_endpoint: auth
 
+# CMS 界面 Logo
+logo_url: https://blog.sfunction.top/favicon/favicon.ico
+
 # 发布模式：simple = 直接提交，不使用 PR 流程
 publish_mode: simple
 
