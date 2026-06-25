@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>博客 CMS 后台</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+    }
+  </style>
+
+  <!--
+    ============================================
+    fetch 拦截器：修复 git/trees API 404 问题
+    ============================================
+    问题：Decap CMS 会调用 GitHub 的 git/trees API 来获取文件列表，
+    但在浏览器端这个 API 经常返回 404（GitHub 的安全策略）。
+    这个拦截器会在检测到 404 时，自动改用 contents API，
+    对 Decap CMS 来说数据是透明的，不影响使用。
+  -->
+  <script>
+  (function() {
+    var origFetch = window.fetch;
+    window.fetch = function(input, init) {
+      var url = typeof input === 'string' ? input : (input && input.url) || '';
+
+      // 只拦截 git/trees API 的请求
+      if (url && url.indexOf('/git/trees/') !== -1 && url.indexOf('api.github.com') !== -1) {
+        return origFetch.call(this, input, init).then(function(resp) {
+          // 如果不是 404，直接返回
+          if (resp.status !== 404) return resp;
+
+          console.log('[Decap CMS] git/trees 返回 404，正在 fallback 到 contents API...');
+
+          // 将 git/trees API 的 URL 转换成 contents API 的 URL
+          var newUrl = url
+            .replace('/git/trees/', '/contents/')
+            .replace('?recursive=5', '')
+            .replace('?recursive=1', '');
+
+          var newInput = (typeof input === 'string')
+            ? newUrl
+            : (Object.assign({}, input, { url: newUrl }));
+
+          // 调用 contents API
+          return origFetch.call(this, newInput, init).then(function(cResp) {
+            if (!cResp.ok) return cResp;
+
+            // 将 contents API 的响应格式转换成 git/trees 的格式
+            return cResp.json().then(function(data) {
+              var treeData = Array.isArray(data) ? data : [data];
+              var fakeTree = {
+                tree: treeData.map(function(item) {
+                  return {
+                    path: item.path,
+                    mode: item.type === 'file' ? '100644' : '040000',
+                    type: item.type,
+                    sha: item.sha,
+                    url: item.url,
+                    size: item.size || 0
+                  };
+                })
+              };
+              return new Response(JSON.stringify(fakeTree), {
+                status: 200,
+                headers: { 'Content-Type': 'application/json' }
+              });
+            }).catch(function() { return cResp; });
+          }).catch(function() { return resp; });
+        });
+      }
+
+      // 其他请求正常处理
+      return origFetch.call(this, input, init);
+    };
+  })();
+  </script>
+</head>
+<body>
+  <!--
+    ============================================
+    Decap CMS 挂载点
+    ============================================
+    ⚠️ 重要：<div id="nc-root"> 必须放在 <body> 里面！
+    如果放在 <head> 里，decap-cms.js 加载时会报错：
+    "Cannot read properties of null (reading 'appendChild')"
+  -->
+  <div id="nc-root">
+    <div style="display:flex;justify-content:center;align-items:center;height:100vh;color:#666;font-size:18px;">
+      <p>⏳ 正在加载 CMS 后台，请稍候...</p>
+    </div>
+  </div>
+
+  <!--
+    ============================================
+    ⚠️ 关键：decap-cms.js 必须放在 </body> 之前！
+    ============================================
+    不能放在 <head> 里！
+    不能写成 async 或 defer！
+
+    版本说明：
+    @^3.0.0 表示使用 3.x.x 的最新版本
+    不要用太老的版本（< 3.0），也不要写死版本号（如 3.14.1）
+  -->
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+
+</body>
+</html>
